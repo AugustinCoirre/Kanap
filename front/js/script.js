@@ -9,29 +9,29 @@ fetch("http://localhost:3000/api/products")
     }
   })
   // reception et nomage du tableau "tableauCanape"
-  .then(function (tableauCanape) {
-    // retourne le tableau dans la console
-    console.log(tableauCanape);
-    // lance la fonction d'affichage des canapés
-    affichageCanape(tableauCanape);
-  })
+  .then(tableauCanape => affichageCanapes(tableauCanape))
   .catch(function (err) {
     // Une erreur est survenue
     document.querySelector(".titles").innerHTML = "<h1>error 404</h1>";
-    console.log("erreur 404, sur ressource api:" + err);
+    console.log("erreur 404, api:" + err);
   });
 
+//-------------------------------------------------------------------
+// fonction affichageCanapes affichage des produits de l'api
+//-------------------------------------------------------------------
+
 // affichage des produits de l'API sur la page index
-function affichageCanape(index) {
-  // selection de la balise section avec la class="items"
-  let selectItems = document.querySelector("#items");
-  for (let canape of index) {
+function affichageCanapes(tableauCanape) {
+  // selection de la balise section avec l'ID = "items"
+  let selectItems = document.getElementById("items");
+  for (let canape of tableauCanape) {
+    //ajout des éléments de manière dynamique
     selectItems.innerHTML += `<a href="./product.html?_id=${canape._id}">
     <article>
       <img src="${canape.imageUrl}" alt="${canape.altTxt}">
         <h3 class="productName">${canape.name}</h3>
         <p class="productDescription">${canape.description}</p>
         </article>
-        </a>` ;
+        </a>`;
   }
 }
