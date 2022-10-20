@@ -12,7 +12,7 @@ fetch("http://localhost:3000/api/products")
   .then(tableauCanape => affichagePanier(tableauCanape))
   .catch(function (err) {
     // Une erreur est survenue
-    console.log("erreur 404, api:" + err);
+    console.log("erreur" + err);
   });
 
 //-------------------------------------------------------------------
@@ -121,7 +121,7 @@ function affichagePanier(tableauCanape) {
     let indexArticle = panier.findIndex(lignePanier => lignePanier.id == canapeId && lignePanier.couleur == canapeColor);
     let lastQuantityArticle = panier[indexArticle];
     
-    // Suppression de la quantitée de l'article selectionner et remplacement par la nouvelle quantitée
+    // Remplacement par la nouvelle quantitée avec une valeur numérique et non une chaine de caractère
     lastQuantityArticle.quantity = parseFloat(newQuantityArticle);
     //on push le tableau panier avec les nouvelles valeurs et on le repasse en chaine de caractère
     localStorage.setItem("panier", JSON.stringify(panier));
@@ -159,3 +159,12 @@ function affichagePanier(tableauCanape) {
   };
   affichageTotal(tableauCanape);
 }
+
+
+//  contact: {
+//    firstName: string,
+//    lastName: string,
+//    address: string,
+//    city: string,
+//    email: string
+//  }

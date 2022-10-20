@@ -28,7 +28,7 @@ fetch("http://localhost:3000/api/products/" + id)
   })
   .catch(function (err) {
     // Une erreur est survenue
-    console.log("erreur 404, api:" + err);
+    console.log("erreur" + err);
   });
 
 //------------------------------------------------------------------------

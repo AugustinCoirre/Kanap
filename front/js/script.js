@@ -13,7 +13,7 @@ fetch("http://localhost:3000/api/products")
   .catch(function (err) {
     // Une erreur est survenue
     document.querySelector(".titles").innerHTML = "<h1>error 404</h1>";
-    console.log("erreur 404, api:" + err);
+    console.log("erreur" + err);
   });
 
 //-------------------------------------------------------------------
