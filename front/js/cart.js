@@ -118,6 +118,7 @@ function affichagePanier(tableauCanape) {
     // on récupère la quanitée changer par le client pour l'article voulu
     let newQuantityArticle = updateValue.target.value;
 
+    // Si findIndex est vrai il retourne la valeur de l'index de l'article
     let indexArticle = panier.findIndex(lignePanier => lignePanier.id == canapeId && lignePanier.couleur == canapeColor);
     let lastQuantityArticle = panier[indexArticle];
     
@@ -166,5 +167,110 @@ function affichagePanier(tableauCanape) {
 //    lastName: string,
 //    address: string,
 //    city: string,
-//    email: string
+//    email: string,
 //  }
+
+validationFormulaire();
+
+//-------------------------------------------------------------------
+// fonction verificationFormulaire vérifie les données inséres par les users et si fausse leur renvoie un message d'erreur
+//-------------------------------------------------------------------
+
+function verificationFormulaire() {
+
+  let firstName = document.getElementById("firstName");
+  let lastName = document.getElementById("lastName");
+  let address = document.getElementById("address");
+  let city = document.getElementById("city");
+  let email = document.getElementById("email");
+
+  //first name --------
+    if (!/^[a-zA-Z ,.',-]+$/.test(firstName.value)) {
+        document.getElementById("firstNameErrorMsg").innerText = "Veuillez écrire votre prénom";
+        return false;
+      } 
+    //last name -----------
+    if (!/^[a-zA-Z ,.',èé,-]+$/.test(lastName.value)) {
+        document.getElementById("lastNameErrorMsg").innerText = "Veuillez écrire votre nom";
+        return false;
+      }
+    //address -----------
+      if (!/^[a-zA-Z ,.',0-9,èé,-]+$/.test(address.value)) {
+        document.getElementById("addressErrorMsg").innerText = "Veuillez écrire votre adresse";
+        return false;
+      }
+    //city -----------
+      if (!/^[a-zA-Z ,.',èé,-]+$/.test(city.value)) {
+        document.getElementById("cityErrorMsg").innerText = "Veuillez écrire votre ville";
+        return false;
+      }
+    //Email -----------
+      if (!/^.+.@.+\.\D.+$/.test(email.value)) {
+        document.getElementById("emailErrorMsg").innerText = "Veuillez écrire votre email";
+        return false;
+      }
+      return true;
+}
+
+//-------------------------------------------------------------------
+// fonction validationFormulaire récupère les données de l'utilisateur, forme un objet contact
+//-------------------------------------------------------------------
+
+function validationFormulaire() {
+
+  document.getElementById("order").addEventListener('click', function(e) {
+
+    e.preventDefault();
+
+    if (verificationFormulaire()) {
+
+      let firstName = document.getElementById("firstName");
+      let lastName = document.getElementById("lastName");
+      let address = document.getElementById("address");
+      let city = document.getElementById("city");
+      let email = document.getElementById("email");
+
+
+        let contact = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email: email.value
+      }
+
+      console.log(contact);
+
+      let panier = localStorage.getItem("panier");
+      tableauPanier = JSON.parse(panier);
+
+      sendFormulaire(contact, tableauPanier);
+        
+    }
+  })
+
+  let panier = localStorage.getItem("panier");
+  tableauPanier = JSON.parse(panier);
+
+
+}
+
+function sendFormulaire(contact, tableauPanier) {
+
+let tableauIdPanier = tableauPanier.map(article => article.id);
+console.log(tableauIdPanier);
+
+let payload = {
+  contact: contact,
+  products: tableauIdPanier
+}
+
+  fetch("http://localhost:3000/api/products/order", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+}
