@@ -184,27 +184,27 @@ function verificationFormulaire() {
   let city = document.getElementById("city");
   let email = document.getElementById("email");
 
-  //first name --------
+  //first name -------- Ne valide pas si contient un chiffre
     if (!/^[a-zA-Z ,.',-]+$/.test(firstName.value)) {
         document.getElementById("firstNameErrorMsg").innerText = "Veuillez écrire votre prénom";
         return false;
       } 
-    //last name -----------
+    //last name ----------- Ne valide pas si contient un chiffre
     if (!/^[a-zA-Z ,.',èé,-]+$/.test(lastName.value)) {
         document.getElementById("lastNameErrorMsg").innerText = "Veuillez écrire votre nom";
         return false;
       }
-    //address -----------
+    //address ----------- 
       if (!/^[a-zA-Z ,.',0-9,èé,-]+$/.test(address.value)) {
         document.getElementById("addressErrorMsg").innerText = "Veuillez écrire votre adresse";
         return false;
       }
-    //city -----------
+    //city ----------- Ne valide pas si contient un chiffre
       if (!/^[a-zA-Z ,.',èé,-]+$/.test(city.value)) {
         document.getElementById("cityErrorMsg").innerText = "Veuillez écrire votre ville";
         return false;
       }
-    //Email -----------
+    //Email ----------- ne valide pas si ne contient pas un "@" et un "." dans le bon ordre
       if (!/^.+.@.+\.\D.+$/.test(email.value)) {
         document.getElementById("emailErrorMsg").innerText = "Veuillez écrire votre email";
         return false;
@@ -255,22 +255,33 @@ function validationFormulaire() {
 
 }
 
+//-------------------------------------------------------------------
+// fonction sendFormulaire envoies payload dans l'API et envoie l'utilisateur sur la page confirmation avec son ID de commande
+//-------------------------------------------------------------------
+
+
 function sendFormulaire(contact, tableauPanier) {
 
 let tableauIdPanier = tableauPanier.map(article => article.id);
-console.log(tableauIdPanier);
 
 let payload = {
   contact: contact,
   products: tableauIdPanier
 }
 
-  fetch("http://localhost:3000/api/products/order", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
-
+    fetch("http://localhost:3000/api/products/order", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then((res) => res.json())
+    .then((payload) => {
+      // envoie à la page confirmation
+      window.location.href = `/front/html/confirmation.html?commande=${payload.orderId}`;
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 }
