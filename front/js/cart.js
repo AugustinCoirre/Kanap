@@ -29,58 +29,101 @@ function affichagePanier(tableauCanape) {
   for (let article of panier) {
     for (let canape of tableauCanape) {
       if (article.id == canape._id) {
-        // création de l'élement article avec un id et color unique     
-        let createArticle = document.createElement("article");
-        // on ajoute la class "cart__item" à la balise article
-        createArticle.className = "cart__item";
-        // on ajoute l'information "id" à la balise article
-        createArticle.dataset.id = canape._id;
-        // on ajoute l'information "color" à la balise article
-        createArticle.dataset.color = article.couleur;
-
-        // ajout du contenu des carts par item
-        createArticle.innerHTML += `<div class="cart__item__img">
-                <img src="${canape.imageUrl}" alt="${canape.altTxt}">
-              </div>
-              <div class="cart__item__content">
-                <div class="cart__item__content__description">
-                  <h2>${canape.name}</h2>
-                  <p>${article.couleur}</p>
-                  <p>${canape.price} €</p>
-                </div>
-                <div class="cart__item__content__settings">
-                  <div class="cart__item__content__settings__quantity">
-                    <p>Qté : </p>
-                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${article.quantity}">
-                  </div>
-                  <div class="cart__item__content__settings__delete">
-                    <p class="deleteItem">Supprimer</p>
-                  </div>
-                </div>
-              </div>`;
-
-        //on récupère le tableau des elements avec la class "deleteItem"  
-        let tableauDeleteItem = createArticle.getElementsByClassName("deleteItem");
-        //selection "<p class="deleteItem">Supprimer</p>" pour l'article en cours de création
-        let deleteItemButton = tableauDeleteItem[0];
-        //ajout d'une fonction au click du button "<p class="deleteItem">Supprimer</p>"
-        deleteItemButton.addEventListener('click', function(){
-          suppressionArticle(canape._id, article.couleur);
-        });
-
-        //on récupère le tableau des elements avec la class "itemQuantity"  
-        let tableauQuantityArticle = createArticle.getElementsByClassName("itemQuantity");
-        //selection "<input class="itemQuantity>" pour l'article en cours de création
-        let quantityArticle = tableauQuantityArticle[0];
-        //ajout d'une fonction au changement du button "<input class="itemQuantity>"
-        quantityArticle.addEventListener('change', function(updateValue){
-          changeQuantityArticle(canape._id, updateValue, article.couleur, tableauCanape);
-        });
-
-        // dans la section "#cart__items" on ajoute l'enfant article
-        selectItems.appendChild(createArticle);
+        cardCanapePanier(canape, article);
       }
     }
+  }
+
+//-------------------------------------------------------------------
+// fonction cardCanapePanier crée des cards pour chaque canapé dans le panier
+//-------------------------------------------------------------------
+
+  function cardCanapePanier(canape, article) {
+    
+      let createArticle = document.createElement("article");
+      createArticle.className = "cart__item";
+      createArticle.dataset.id = canape._id;
+      createArticle.dataset.color = article.couleur;
+
+      let divImg = document.createElement("div");
+      divImg.className = "cart__item__img";
+        
+      let img = document.createElement("img");
+      img.src = canape.imageUrl;
+      img.alt = canape.altTxt;
+
+      let divContent = document.createElement("div");
+      divContent.className = "cart__item__content";
+
+      let divContent_Description = document.createElement("div");
+      divContent_Description.className = "cart__item__content__description"
+
+      let h2 = document.createElement("h2");
+      h2.innerText = canape.name
+
+      let pColor = document.createElement("p");
+      pColor.innerText = article.couleur
+
+      let pPrice = document.createElement("p");
+      pPrice.innerText = canape.price + "€"
+
+      let divContent_Settings = document.createElement("div");
+      divContent_Settings.className = "cart__item__content__settings";
+        
+      let divContent_SettingsQuantity = document.createElement("div");
+      divContent_SettingsQuantity.className = "cart__item__content__settings_quantity";
+
+      let p = document.createElement("p");
+      p.innerText = "qté :";
+
+      let input = document.createElement("input");
+      input.type = "number";
+      input.className = "itemQuantity";
+      input.name = "itemQuantity";
+      input.min = "1";
+      input.max = "100";
+      input.value = article.quantity;
+
+      let divContent_SettingsDelete = document.createElement("div");
+      divContent_SettingsDelete.className = "cart__item__content__settings__delete";
+
+      let pDelete = document.createElement("p");
+      pDelete.className = "deleteItem";
+      pDelete.innerText = "Supprimer";
+
+
+      selectItems.appendChild(createArticle);
+      createArticle.appendChild(divImg);
+      divImg.appendChild(img);
+      createArticle.appendChild(divContent);
+      divContent.appendChild(divContent_Description);
+      divContent_Description.appendChild(h2);
+      divContent_Description.appendChild(pColor);
+      divContent_Description.appendChild(pPrice);
+      divContent.appendChild(divContent_Settings);
+      divContent_Settings.appendChild(divContent_SettingsQuantity);
+      divContent_SettingsQuantity.appendChild(p);
+      divContent_SettingsQuantity.appendChild(input);
+      divContent_Settings.appendChild(divContent_SettingsDelete);
+      divContent_SettingsDelete.appendChild(pDelete);
+
+         //on récupère le tableau des elements avec la class "deleteItem"  
+         let tableauDeleteItem = createArticle.getElementsByClassName("deleteItem");
+       
+         let deleteItemButton = tableauDeleteItem[0];
+ 
+         deleteItemButton.addEventListener('click', function(){
+           suppressionArticle(canape._id, article.couleur);
+         });
+ 
+         //on récupère le tableau des elements avec la class "itemQuantity"  
+         let tableauQuantityArticle = createArticle.getElementsByClassName("itemQuantity");
+         //selection "<input class="itemQuantity>" pour l'article en cours de création
+         let quantityArticle = tableauQuantityArticle[0];
+         //ajout d'une fonction au changement du button "<input class="itemQuantity>"
+         quantityArticle.addEventListener('change', function(updateValue){
+           changeQuantityArticle(canape._id, updateValue, article.couleur, tableauCanape);
+         });       
   }
 
 //-------------------------------------------------------------------
@@ -115,7 +158,7 @@ function affichagePanier(tableauCanape) {
     let panier = localStorage.getItem("panier");
     panier = JSON.parse(panier);
 
-    // on récupère la quanitée changer par le client pour l'article voulu
+    // on récupère la quantitée changer par le client pour l'article voulu
     let newQuantityArticle = updateValue.target.value;
 
     // Si findIndex est vrai il retourne la valeur de l'index de l'article
@@ -161,7 +204,6 @@ function affichagePanier(tableauCanape) {
   affichageTotal(tableauCanape);
 }
 
-
 //  contact: {
 //    firstName: string,
 //    lastName: string,
@@ -170,6 +212,7 @@ function affichagePanier(tableauCanape) {
 //    email: string,
 //  }
 
+// appel de la fonction validationFormulaire
 validationFormulaire();
 
 //-------------------------------------------------------------------
@@ -248,11 +291,6 @@ function validationFormulaire() {
         
     }
   })
-
-  let panier = localStorage.getItem("panier");
-  tableauPanier = JSON.parse(panier);
-
-
 }
 
 //-------------------------------------------------------------------

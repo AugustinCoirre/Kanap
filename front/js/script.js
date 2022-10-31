@@ -12,26 +12,47 @@ fetch("http://localhost:3000/api/products")
   .then(tableauCanape => affichageCanapes(tableauCanape))
   .catch(function (err) {
     // Une erreur est survenue
-    document.querySelector(".titles").innerHTML = "<h1>error 404</h1>";
     console.log("erreur" + err);
   });
 
 //-------------------------------------------------------------------
-// fonction affichageCanapes affichage des produits de l'api
+// fonction affichageCanapes affichage des produits de l'api sur la page index
 //-------------------------------------------------------------------
-
-// affichage des produits de l'API sur la page index
 function affichageCanapes(tableauCanape) {
-  // selection de la balise section avec l'ID = "items"
-  let selectItems = document.getElementById("items");
+  
   for (let canape of tableauCanape) {
-    //ajout des éléments de manière dynamique
-    selectItems.innerHTML += `<a href="./product.html?_id=${canape._id}">
-    <article>
-      <img src="${canape.imageUrl}" alt="${canape.altTxt}">
-        <h3 class="productName">${canape.name}</h3>
-        <p class="productDescription">${canape.description}</p>
-        </article>
-        </a>`;
+    cardCanape(canape);
+  }
+
+//-------------------------------------------------------------------
+// fonction cardCanape crée des cards pour chaque canapé
+//-------------------------------------------------------------------
+  function cardCanape(canape) {
+
+    let selectItems = document.getElementById("items");
+
+    let a = document.createElement("a");
+    a.href = "./product.html?_id=" + canape._id;
+
+    let CreateArticle = document.createElement("article");
+
+    let CreateImg = document.createElement("img");
+    CreateImg.src = canape.imageUrl;
+    CreateImg.alt = canape.altTxt;
+
+    let createH3 = document.createElement("h3");
+    createH3.className = "productName";
+    createH3.innerText = canape.name;
+
+    let CreateP = document.createElement("p");
+    CreateP.className = "productDescription";
+    CreateP.innerText = canape.description;
+    
+    selectItems.appendChild(a);
+    a.appendChild(CreateArticle);
+    CreateArticle.appendChild(CreateImg); 
+    CreateArticle.appendChild(createH3);
+    CreateArticle.appendChild(CreateP); 
+
   }
 }

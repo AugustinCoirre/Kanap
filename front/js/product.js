@@ -2,7 +2,7 @@
 // Récupération de l'id du produit via l' URL
 //--------------------------------------------------------------------------
 
-//la variable params récupère l'url de la page
+//la variable params récupère l'url de la page (?_id=)
 const params = new URLSearchParams(document.location.search);
 // la variable id va récupérer la valeur du paramètre _id
 const id = params.get("_id");
@@ -19,10 +19,10 @@ fetch("http://localhost:3000/api/products/" + id)
       return res.json();
     }
   })
-  // reception et nommage du tableau "tableauCanape"
+  // reception et nommage de l'objet "unCanape"
   .then(function (unCanape) {
     // retourne le tableau dans la console
-    // console.log(unCanape);
+    console.log(unCanape);
     // execution de la fontion leCanape
     leCanape(unCanape);
   })
