@@ -56,16 +56,16 @@ function affichagePanier(tableauCanape) {
       divContent.className = "cart__item__content";
 
       let divContent_Description = document.createElement("div");
-      divContent_Description.className = "cart__item__content__description"
+      divContent_Description.className = "cart__item__content__description";
 
       let h2 = document.createElement("h2");
-      h2.innerText = canape.name
+      h2.innerText = canape.name;
 
       let pColor = document.createElement("p");
-      pColor.innerText = article.couleur
+      pColor.innerText = article.couleur;
 
       let pPrice = document.createElement("p");
-      pPrice.innerText = canape.price + "€"
+      pPrice.innerText = canape.price + "€";
 
       let divContent_Settings = document.createElement("div");
       divContent_Settings.className = "cart__item__content__settings";
@@ -296,7 +296,6 @@ function validationFormulaire() {
 //-------------------------------------------------------------------
 // fonction sendFormulaire envoies payload dans l'API et envoie l'utilisateur sur la page confirmation avec son ID de commande
 //-------------------------------------------------------------------
-
 
 function sendFormulaire(contact, tableauPanier) {
 
